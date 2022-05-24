@@ -47,8 +47,8 @@ def generate_launch_description():
         output='screen',
         namespace='robot1',
         parameters=[
-                {"publisher_port": 1266.0,
-                 "server_port": 1267.0}])
+                {'publisher_port': 1266.0,
+                 'server_port': 1267.0}])
 
     start_robot_2_bt = Node(
         package='multi_nav2',
@@ -56,8 +56,8 @@ def generate_launch_description():
         output='screen',
         namespace='robot2',
         parameters=[
-                {"publisher_port": 1366.0,
-                 "server_port": 1367.0}])
+                {'publisher_port': 1366.0,
+                 'server_port': 1367.0}])
 
     #     multi_robot_cmds.append(start_robot_bt)
 
