@@ -136,20 +136,22 @@ public:
         y_robot = ceil(y_robot);
         y_robot = y_robot / 10;
         // RCLCPP_INFO(this->get_logger(), "x robot %d x global %d ", pose_array_unknown_limit_global_.poses[l].position.x, pose_array_unknown_limit_robot_.poses[i].position.x);
-        if(x_global == x_robot) {
+        if (x_global == x_robot) {
           // RCLCPP_INFO(this->get_logger(), "same x");
-          if(y_global == y_robot) {
+          if (y_global == y_robot) {
             // RCLCPP_INFO(this->get_logger(), "same y");
             pose_array_unknown_limit_.poses.push_back(pose_array_unknown_limit_robot_.poses[i]);
           }
         }
         if (x_robot > 100 || x_robot < -100) {
           // RCLCPP_INFO(this->get_logger(), "map global asigno inf");
-          RCLCPP_INFO(this->get_logger(), "map global asigno x robot %f y robot %f ", x_robot, y_robot);
+          RCLCPP_INFO(
+            this->get_logger(), "map global asigno x robot %f y robot %f ", x_robot, y_robot);
         }
         if (y_robot > 100 || y_robot < -100) {
           // RCLCPP_INFO(this->get_logger(), "map global asigno inf");
-          RCLCPP_INFO(this->get_logger(), "map global asigno x robot %f y robot %f ", x_robot, y_robot);
+          RCLCPP_INFO(
+            this->get_logger(), "map global asigno x robot %f y robot %f ", x_robot, y_robot);
         }
       }
     }
@@ -158,7 +160,9 @@ public:
   }
 
 
-  bool check_if_limit(nav2_costmap_2d::Costmap2D mapa_, float x, float y, int map_width, int map_height)
+  bool check_if_limit(
+    nav2_costmap_2d::Costmap2D mapa_, float x, float y, int map_width,
+    int map_height)
   {
     // comprobamos que no vamos a ver un dato fuera del mapa
     if (x + 1 < map_width) {
@@ -195,7 +199,9 @@ public:
     return false;
   }
 
-  void occupancygrid_to_costmap(const nav_msgs::msg::OccupancyGrid::SharedPtr msg, nav2_costmap_2d::Costmap2D &mapa_)
+  void occupancygrid_to_costmap(
+    const nav_msgs::msg::OccupancyGrid::SharedPtr msg,
+    nav2_costmap_2d::Costmap2D & mapa_)
   {
     float map_resolution = msg->info.resolution;  // resolution [m/cell]
     int map_width = msg->info.width;    // ancho
@@ -214,14 +220,13 @@ public:
   }
 
 private:
-
   void callback_map_global(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
   {
 
     pose_array_unknown_limit_global_.poses.clear();
 
     occupancygrid_to_costmap(msg, mapa_costmap_global_);
-    
+
     int map_width = mapa_costmap_global_.getSizeInCellsX();    // ancho
     int map_height = mapa_costmap_global_.getSizeInCellsY();  // alto
     // RCLCPP_INFO(this->get_logger(), "MAP WIDTH %d MAP HEIGHT %d", map_width, map_height);
@@ -264,7 +269,7 @@ private:
     pose_array_unknown_limit_robot_.poses.clear();
 
     occupancygrid_to_costmap(msg, mapa_costmap_robot_);
-    
+
     int map_width = mapa_costmap_robot_.getSizeInCellsX();    // ancho
     int map_height = mapa_costmap_robot_.getSizeInCellsY();  // alto
     // RCLCPP_INFO(this->get_logger(), "MAP WIDTH %d MAP HEIGHT %d", map_width, map_height);

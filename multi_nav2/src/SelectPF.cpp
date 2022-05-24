@@ -110,7 +110,6 @@ void
 SelectPF::callback_goal_poses_(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
 {
   other_robot_ = true;
-  
   goal_pos_other_.pose.position.x = msg->pose.position.x;
   goal_pos_other_.pose.position.y = msg->pose.position.y;
   goal_pos_other_.pose.position.z = msg->pose.position.z;
@@ -133,7 +132,8 @@ SelectPF::callback_poses_(const geometry_msgs::msg::PoseArray::SharedPtr msg)
     for (int i = 0; i < int(msg->poses.size()); i++) {
       float x_ = msg->poses[i].position.x;
       float y_ = msg->poses[i].position.y;
-      double distance_ = abs(x_ - goal_pos_other_.pose.position.x) + abs(y_ - goal_pos_other_.pose.position.y);
+      double distance_ = abs(x_ - goal_pos_other_.pose.position.x) + abs(
+        y_ - goal_pos_other_.pose.position.y);
       if (higher_distance_ == -1 || distance_ > higher_distance_) {
         higher_distance_ = distance_;
         goal_pos_.header.frame_id = "map";

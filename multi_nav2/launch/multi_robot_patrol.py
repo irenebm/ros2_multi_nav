@@ -12,38 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from ament_index_python.packages import get_package_share_directory
-
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import Node
 
 
 def generate_launch_description():
 
     # Names and poses of the robots
-    robots = [
-        {'name': 'robot1', 'x_pose': 0.0, 'y_pose': 0.5, 'z_pose': 0.01},
-        {'name': 'robot2', 'x_pose': 0.0, 'y_pose': -0.5, 'z_pose': 0.01}]
-
+    # robots = [
+    #     {'name': 'robot1', 'x_pose': 0.0, 'y_pose': 0.5, 'z_pose': 0.01},
+    #     {'name': 'robot2', 'x_pose': 0.0, 'y_pose': -0.5, 'z_pose': 0.01}]
 
     # namespace = LaunchConfiguration('namespace')
-    use_sim_time = LaunchConfiguration('use_sim_time')
 
     # remappings = [('/tf', 'tf'),
     #               ('/tf_static', 'tf_static'),
     #               ('/odom', 'odom'),
     #               ('/poses', 'poses'),
     #               ('/my_marker_goal', 'my_marker_goal')]
-
-    declare_use_sim_time_cmd = DeclareLaunchArgument(
-        'use_sim_time',
-        default_value='true',
-        description='Use simulation (Gazebo) clock if true')
-
 
     # Define commands for launching the navigation instances
     # multi_robot_cmds = []
@@ -62,7 +48,7 @@ def generate_launch_description():
         namespace='robot1',
         parameters=[
                 {"publisher_port": 1266.0,
-                "server_port": 1267.0}])
+                 "server_port": 1267.0}])
 
     start_robot_2_bt = Node(
         package='multi_nav2',
@@ -71,15 +57,12 @@ def generate_launch_description():
         namespace='robot2',
         parameters=[
                 {"publisher_port": 1366.0,
-                "server_port": 1367.0}])
+                 "server_port": 1367.0}])
 
     #     multi_robot_cmds.append(start_robot_bt)
 
     # Create the launch description and populate
     ld = LaunchDescription()
-
-    # Declare the launch options
-    ld.add_action(declare_use_sim_time_cmd)
 
     # Add the actions to start gazebo, robots and simulations
 
