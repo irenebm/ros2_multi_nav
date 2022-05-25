@@ -12,8 +12,7 @@ Status](https://github.com/irenebm/ros2_multi_nav/workflows/master/badge.svg)](h
 Para llevar a cabo este objetivo el trabajo constará de las siguientes fases:
 * [1 robot simulado teleoperado](https://github.com/irenebm/bitacora_tfg_multirobot/wiki/1---SLAM-1-Robot-simulado-teleoperado)
 * [1 robot simulado autónomo](https://github.com/irenebm/bitacora_tfg_multirobot/wiki/2---SLAM-1-robot-simuado-aut%C3%B3nomo)
-* 2 robots simulados teleoperados
-* 2 robots simulados autónomos
+* [2 robots simulados autónomos](https://github.com/irenebm/bitacora_tfg_multirobot/wiki/3-SLAM-2-robots-simulados-aut%C3%B3nomos)
 * 3 robots reales autónomos
 
 ![](https://github.com/irenebm/bitacora_tfg_multirobot/blob/main/wiki/robotintro_dribble.gif)
