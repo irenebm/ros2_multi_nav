@@ -38,8 +38,11 @@ BigDistancePolicy::get_pose(
   for (int i = 0; i < int(msg.poses.size()); i++) {
     float x_ = msg.poses[i].position.x;
     float y_ = msg.poses[i].position.y;
-    double distance_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
-    if (higher_distance_ == -1 || distance_ > higher_distance_) {
+    double distance_ =
+      sqrt(
+      (x_ - robot_pos_.position.x) * (x_ - robot_pos_.position.x) +
+      (y_ - robot_pos_.position.y) * (y_ - robot_pos_.position.y));
+    if (higher_distance_ < 0.0 || distance_ > higher_distance_) {
       higher_distance_ = distance_;
       goal_pos_.header.frame_id = "map";
       goal_pos_.pose.position.x = x_;
@@ -62,9 +65,14 @@ BigDistancePolicy::get_pose_2_robots(
   for (int i = 0; i < int(msg.poses.size()); i++) {
     float x_ = msg.poses[i].position.x;
     float y_ = msg.poses[i].position.y;
-    double distance_1_ = abs(x_ - goal_pos_other_.pose.position.x) + abs(
-      y_ - goal_pos_other_.pose.position.y);
-    double distance_2_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
+    double distance_1_ =
+      sqrt(
+      (x_ - goal_pos_other_.pose.position.x) * (x_ - goal_pos_other_.pose.position.x) +
+      (y_ - goal_pos_other_.pose.position.y) * (y_ - goal_pos_other_.pose.position.y));
+    double distance_2_ =
+      sqrt(
+      (x_ - robot_pos_.position.x) * (x_ - robot_pos_.position.x) +
+      (y_ - robot_pos_.position.y) * (y_ - robot_pos_.position.y));
     if (higher_distance_ == -1 || (distance_1_ + distance_2_) > higher_distance_) {
       higher_distance_ = (distance_1_ + distance_2_);
       goal_pos_.header.frame_id = "map";
