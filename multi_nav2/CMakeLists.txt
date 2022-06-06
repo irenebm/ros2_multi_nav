@@ -71,15 +71,10 @@ add_executable(patrolling_main src/patrolling_main.cpp)
 ament_target_dependencies(patrolling_main ${dependencies})
 target_link_libraries(patrolling_main ${ZMQ_LIBRARIES})
 
-# add_executable(BigDistancePolicy src/BigDistancePolicy.cpp)
-# ament_target_dependencies(BigDistancePolicy ${dependencies})
-# target_link_libraries(BigDistancePolicy ${ZMQ_LIBRARIES})
-
 install(TARGETS
   ${plugin_libs}
   check_pf
   patrolling_main
-  # BigDistancePolicy
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
   # RUNTIME DESTINATION bin
