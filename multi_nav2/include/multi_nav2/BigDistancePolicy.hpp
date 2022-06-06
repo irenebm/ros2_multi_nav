@@ -33,9 +33,14 @@ public:
   BigDistancePolicy(
     const std::string & xml_tag_name);
 
-  geometry_msgs::msg::PoseStamped get_pose(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_) override;
+  geometry_msgs::msg::PoseStamped get_pose(
+    geometry_msgs::msg::PoseArray & msg,
+    geometry_msgs::msg::Pose robot_pos_) override;
 
-  geometry_msgs::msg::PoseStamped get_pose_2_robots(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_, geometry_msgs::msg::PoseStamped goal_pos_other_) override;
+  geometry_msgs::msg::PoseStamped get_pose_2_robots(
+    geometry_msgs::msg::PoseArray & msg,
+    geometry_msgs::msg::Pose robot_pos_,
+    geometry_msgs::msg::PoseStamped goal_pos_other_) override;
 
 private:
   geometry_msgs::msg::PoseStamped goal_pos_;

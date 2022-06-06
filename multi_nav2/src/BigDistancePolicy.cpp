@@ -28,48 +28,52 @@ BigDistancePolicy::BigDistancePolicy(
 
 }
 
-geometry_msgs::msg::PoseStamped 
-BigDistancePolicy::get_pose(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_)
-  {
-    double higher_distance_ = -1;
-
-    for (int i = 0; i < int(msg.poses.size()); i++) {
-      float x_ = msg.poses[i].position.x;
-      float y_ = msg.poses[i].position.y;
-      double distance_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
-      if (higher_distance_ == -1 || distance_ > higher_distance_) {
-        higher_distance_ = distance_;
-        goal_pos_.header.frame_id = "map";
-        goal_pos_.pose.position.x = x_;
-        goal_pos_.pose.position.y = y_;
-        // RCLCPP_INFO(node_->get_logger(), "goal asigno x  %f y  %f ", x_, y_);
-      }
-    }
-    return goal_pos_;
-  }
-
-
-geometry_msgs::msg::PoseStamped 
-BigDistancePolicy::get_pose_2_robots(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_, geometry_msgs::msg::PoseStamped goal_pos_other_)
+geometry_msgs::msg::PoseStamped
+BigDistancePolicy::get_pose(
+  geometry_msgs::msg::PoseArray & msg,
+  geometry_msgs::msg::Pose robot_pos_)
 {
-double higher_distance_ = -1;
+  double higher_distance_ = -1;
 
-for (int i = 0; i < int(msg.poses.size()); i++) {
+  for (int i = 0; i < int(msg.poses.size()); i++) {
+    float x_ = msg.poses[i].position.x;
+    float y_ = msg.poses[i].position.y;
+    double distance_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
+    if (higher_distance_ == -1 || distance_ > higher_distance_) {
+      higher_distance_ = distance_;
+      goal_pos_.header.frame_id = "map";
+      goal_pos_.pose.position.x = x_;
+      goal_pos_.pose.position.y = y_;
+      // RCLCPP_INFO(node_->get_logger(), "goal asigno x  %f y  %f ", x_, y_);
+    }
+  }
+  return goal_pos_;
+}
+
+
+geometry_msgs::msg::PoseStamped
+BigDistancePolicy::get_pose_2_robots(
+  geometry_msgs::msg::PoseArray & msg,
+  geometry_msgs::msg::Pose robot_pos_,
+  geometry_msgs::msg::PoseStamped goal_pos_other_)
+{
+  double higher_distance_ = -1;
+
+  for (int i = 0; i < int(msg.poses.size()); i++) {
     float x_ = msg.poses[i].position.x;
     float y_ = msg.poses[i].position.y;
     double distance_1_ = abs(x_ - goal_pos_other_.pose.position.x) + abs(
-    y_ - goal_pos_other_.pose.position.y);
+      y_ - goal_pos_other_.pose.position.y);
     double distance_2_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
     if (higher_distance_ == -1 || (distance_1_ + distance_2_) > higher_distance_) {
-    higher_distance_ = (distance_1_ + distance_2_);
-    goal_pos_.header.frame_id = "map";
-    goal_pos_.pose.position.x = x_;
-    goal_pos_.pose.position.y = y_;
+      higher_distance_ = (distance_1_ + distance_2_);
+      goal_pos_.header.frame_id = "map";
+      goal_pos_.pose.position.x = x_;
+      goal_pos_.pose.position.y = y_;
     }
-}
+  }
 
-return goal_pos_;
+  return goal_pos_;
 }
-
 
 }  // namespace multi_nav2

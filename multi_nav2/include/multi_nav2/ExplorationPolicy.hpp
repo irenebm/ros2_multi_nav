@@ -37,9 +37,14 @@ public:
     const std::string & xml_tag_name)
   {}
 
-  virtual geometry_msgs::msg::PoseStamped get_pose(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_)  = 0;
+  virtual geometry_msgs::msg::PoseStamped get_pose(
+    geometry_msgs::msg::PoseArray & msg,
+    geometry_msgs::msg::Pose robot_pos_)  = 0;
 
-  virtual geometry_msgs::msg::PoseStamped get_pose_2_robots(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_, geometry_msgs::msg::PoseStamped goal_pos_other_) = 0;
+  virtual geometry_msgs::msg::PoseStamped get_pose_2_robots(
+    geometry_msgs::msg::PoseArray & msg,
+    geometry_msgs::msg::Pose robot_pos_,
+    geometry_msgs::msg::PoseStamped goal_pos_other_) = 0;
 
 };
 
