@@ -29,6 +29,9 @@
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 
+#include "multi_nav2/BigDistancePolicy.hpp"
+#include "multi_nav2/LessDistancePolicy.hpp"
+
 #include "rclcpp/rclcpp.hpp"
 
 namespace multi_nav2
@@ -76,6 +79,8 @@ private:
   geometry_msgs::msg::PoseStamped goal_pos_other_;
 
   bool set_goal_ = false;
+
+  multi_nav2::ExplorationPolicy * policy_;
 
 };
 

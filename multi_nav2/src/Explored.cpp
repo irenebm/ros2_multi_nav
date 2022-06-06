@@ -30,7 +30,7 @@ Explored::Explored(
 
   // se subscribe a las posiciones de los pf que publica check_pf.cpp
   sub_poses_ = node_->create_subscription<geometry_msgs::msg::PoseArray>(
-    "poses", 10, std::bind(&Explored::callback_poses, this, _1));
+    "/my_poses", 10, std::bind(&Explored::callback_poses, this, _1));
 
 }
 

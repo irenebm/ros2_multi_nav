@@ -19,24 +19,30 @@
 
 #include "std_msgs/msg/string.hpp"
 #include "geometry_msgs/msg/pose_array.hpp"
+#include "geometry_msgs/msg/pose_stamped.hpp"
+#include "geometry_msgs/msg/pose.hpp"
 
 #include "rclcpp/rclcpp.hpp"
+
+#ifndef MULTINAV2__EXPLORATION_POLICY_HPP_
+#define MULTINAV2__EXPLORATION_POLICY_HPP_
 
 namespace multi_nav2
 {
 
-class ExplorationPolicy : public BT::ActionNodeBase
+class ExplorationPolicy
 {
 public:
-  explicit ExplorationPolicy(
-    const std::string & xml_tag_name,
-    const BT::NodeConfiguration & conf);
+  ExplorationPolicy(
+    const std::string & xml_tag_name)
+  {}
 
-  virtual void set_policy(geometry_msgs::msg::PoseArray poses, std_msgs::msg::String policy);
+  virtual geometry_msgs::msg::PoseStamped get_pose(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_)  = 0;
 
-private:
-  rclcpp::Node::SharedPtr node_;
+  virtual geometry_msgs::msg::PoseStamped get_pose_2_robots(geometry_msgs::msg::PoseArray& msg, geometry_msgs::msg::Pose robot_pos_, geometry_msgs::msg::PoseStamped goal_pos_other_) = 0;
 
 };
 
 }  // namespace multi_nav2
+
+#endif  // MULTINAV2__EXPLORATION_POLICY_HPP_

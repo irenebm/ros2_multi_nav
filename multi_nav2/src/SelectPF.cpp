@@ -35,10 +35,10 @@ SelectPF::SelectPF(
     1s, std::bind(&SelectPF::timer_callback_goal_marker, this));
 
   // publica la posicion a la que va a ir
-  pub_goal_pose_ = node_->create_publisher<geometry_msgs::msg::PoseStamped>("pose_goal", 10);
+  pub_goal_pose_ = node_->create_publisher<geometry_msgs::msg::PoseStamped>("/pose_goal", 10);
 
   sub_goal_pose_ = node_->create_subscription<geometry_msgs::msg::PoseStamped>(
-    "pose_goal", 10, std::bind(&SelectPF::callback_goal_poses_, this, _1));
+    "/pose_goal", 10, std::bind(&SelectPF::callback_goal_poses_, this, _1));
 
   // se subscribe a la posicion del robot en el mundo, no en el mapa
   sub_robot_pos_ = node_->create_subscription<nav_msgs::msg::Odometry>(
@@ -46,7 +46,14 @@ SelectPF::SelectPF(
 
   // se subscribe a las posiciones de los pf que publica check_pf.cpp
   sub_poses_ = node_->create_subscription<geometry_msgs::msg::PoseArray>(
-    "poses", 10, std::bind(&SelectPF::callback_poses_, this, _1));
+    "/my_poses", 10, std::bind(&SelectPF::callback_poses_, this, _1));
+
+  // if (a)
+  //   policy_ = new LessDistancePolicy();
+  // else
+  //   policy_ = new BigDistancePolicy();
+
+  policy_ = new BigDistancePolicy(xml_tag_name);
 
 }
 
@@ -129,35 +136,12 @@ SelectPF::callback_poses_(const geometry_msgs::msg::PoseArray::SharedPtr msg)
   double higher_distance_ = -1;
   if (other_robot_) {
     std::cout << "other robot " << std::endl;
-    for (int i = 0; i < int(msg->poses.size()); i++) {
-      float x_ = msg->poses[i].position.x;
-      float y_ = msg->poses[i].position.y;
-      double distance_ = abs(x_ - goal_pos_other_.pose.position.x) + abs(
-        y_ - goal_pos_other_.pose.position.y);
-      if (higher_distance_ == -1 || distance_ > higher_distance_) {
-        higher_distance_ = distance_;
-        goal_pos_.header.frame_id = "map";
-        goal_pos_.pose.position.x = x_;
-        goal_pos_.pose.position.y = y_;
-
-        set_goal_ = true;
-      }
-    }
+    goal_pos_ = policy_->get_pose_2_robots(*msg, robot_pos_, goal_pos_other_);
+    set_goal_ = true;
   } else {
     std::cout << "no other robot " << std::endl;
-    for (int i = 0; i < int(msg->poses.size()); i++) {
-      float x_ = msg->poses[i].position.x;
-      float y_ = msg->poses[i].position.y;
-      double distance_ = abs(x_ - robot_pos_.position.x) + abs(y_ - robot_pos_.position.y);
-      if (higher_distance_ == -1 || distance_ > higher_distance_) {
-        higher_distance_ = distance_;
-        goal_pos_.header.frame_id = "map";
-        goal_pos_.pose.position.x = x_;
-        goal_pos_.pose.position.y = y_;
-        RCLCPP_INFO(node_->get_logger(), "goal asigno x  %f y  %f ", x_, y_);
-        set_goal_ = true;
-      }
-    }
+    goal_pos_ = policy_->get_pose(*msg, robot_pos_);
+    set_goal_ = true;
   }
   // RCLCPP_INFO(node_->get_logger(), "punto deseado: %f %f", goal_pos_.pose.position.x, goal_pos_.pose.position.y);
 }

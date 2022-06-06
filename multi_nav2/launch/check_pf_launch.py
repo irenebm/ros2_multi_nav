@@ -22,16 +22,14 @@ def generate_launch_description():
         package='multi_nav2',
         executable='check_pf',
         output='screen',
-        remappings=[('my_map', '/robot1/map'),
-                    ('my_markers', '/robot1/markers'),
+        remappings=[('my_markers', '/robot1/markers'),
                     ('my_poses', '/robot1/poses')])
 
     start_robot_2 = Node(
         package='multi_nav2',
         executable='check_pf',
         output='screen',
-        remappings=[('my_map', '/robot2/map'),
-                    ('my_markers', '/robot2/markers'),
+        remappings=[('my_markers', '/robot2/markers'),
                     ('my_poses', '/robot2/poses')])
 
     # Create the launch description and populate
