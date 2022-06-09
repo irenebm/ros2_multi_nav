@@ -53,7 +53,9 @@ SelectPF::SelectPF(
   // else
   //   policy_ = new BigDistancePolicy();
 
-  policy_ = new BigDistancePolicy(xml_tag_name);
+  policy_ = new multi_nav2::BigDistancePolicy("policy");
+
+  timer_init_ = time(NULL);
 
 }
 
@@ -69,11 +71,11 @@ SelectPF::tick()
   std::cout << "SelectPF tick " << std::endl;
   if (set_goal_) {
     set_goal_ = false;
-    setOutput("waypoint", goal_pos_);
-    pub_goal_pose_->publish(goal_pos_);
     RCLCPP_INFO(
       node_->get_logger(), "SelectPF sending goal: %f %f", goal_pos_.pose.position.x,
       goal_pos_.pose.position.y);
+    setOutput("waypoint", goal_pos_);
+    pub_goal_pose_->publish(goal_pos_);
     return BT::NodeStatus::SUCCESS;
   } else {
     std::cout << "Still don't have a goal " << std::endl;
@@ -133,17 +135,32 @@ SelectPF::callback_robot_pos_(const nav_msgs::msg::Odometry::SharedPtr msg)
 void
 SelectPF::callback_poses_(const geometry_msgs::msg::PoseArray::SharedPtr msg)
 {
-  double higher_distance_ = -1;
+  write_info(*msg);
+
   if (other_robot_) {
     std::cout << "other robot " << std::endl;
     goal_pos_ = policy_->get_pose_2_robots(*msg, robot_pos_, goal_pos_other_);
     set_goal_ = true;
+    std::cout << "before other robot " << std::endl;
   } else {
     std::cout << "no other robot " << std::endl;
     goal_pos_ = policy_->get_pose(*msg, robot_pos_);
     set_goal_ = true;
   }
-  // RCLCPP_INFO(node_->get_logger(), "punto deseado: %f %f", goal_pos_.pose.position.x, goal_pos_.pose.position.y);
+}
+
+void
+SelectPF::write_info(geometry_msgs::msg::PoseArray & msg)
+{
+  RCLCPP_INFO(
+    node_->get_logger(), "cantidad de puntos: %d tiempo %ld", int(msg.poses.size()),
+    (time(NULL) - timer_init_));
+
+  std::ofstream myfile;
+  myfile.open("info_file.txt", std::ios::app);
+  myfile << "cantidad de puntos: " << int(msg.poses.size()) << " tiempo " <<
+  (time(NULL) - timer_init_) << "\n";
+  myfile.close();
 }
 
 

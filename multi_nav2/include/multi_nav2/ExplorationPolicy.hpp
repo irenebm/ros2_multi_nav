@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef MULTINAV2__EXPLORATION_POLICY_HPP_
+#define MULTINAV2__EXPLORATION_POLICY_HPP_
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -23,9 +26,6 @@
 #include "geometry_msgs/msg/pose.hpp"
 
 #include "rclcpp/rclcpp.hpp"
-
-#ifndef MULTINAV2__EXPLORATION_POLICY_HPP_
-#define MULTINAV2__EXPLORATION_POLICY_HPP_
 
 namespace multi_nav2
 {

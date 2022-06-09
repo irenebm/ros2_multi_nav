@@ -19,14 +19,6 @@
 
 #include "ament_index_cpp/get_package_share_directory.hpp"
 
-// #include "multi_nav2/Explored.hpp"
-// #include "multi_nav2/SelectPF.hpp"
-// #include "multi_nav2/Move.hpp"
-
-// #include "nav2_msgs/action/navigate_to_pose.hpp"
-
-// #include "multi_nav2/BTActionNode.hpp"
-
 #include "rclcpp/rclcpp.hpp"
 
 int main(int argc, char * argv[])
@@ -59,9 +51,7 @@ int main(int argc, char * argv[])
   blackboard->set("node", node);
 
   BT::Tree tree = factory.createTreeFromFile(xml_file, blackboard);
-  // BT::Tree tree = factory.createTreeFromFile(xml_file);
 
-  // BT::PublisherZMQ::PublisherZMQ(const BT::Tree & tree,unsigned max_msg_per_second = 25,unsigned publisher_port = 1666,unsigned server_port = 1667)
   auto publisher_zmq = std::make_shared<BT::PublisherZMQ>(tree, 10, publisher_port_, server_port_);
 
   rclcpp::Rate rate(10);

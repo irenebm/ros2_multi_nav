@@ -20,6 +20,9 @@
 #include <vector>
 #include <memory>
 
+#include <time.h>
+#include <fstream>
+
 #include "behaviortree_cpp_v3/behavior_tree.h"
 #include "behaviortree_cpp_v3/bt_factory.h"
 
@@ -29,6 +32,7 @@
 #include "geometry_msgs/msg/pose_array.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
 
+#include "multi_nav2/ExplorationPolicy.hpp"
 #include "multi_nav2/BigDistancePolicy.hpp"
 #include "multi_nav2/LessDistancePolicy.hpp"
 
@@ -51,6 +55,8 @@ public:
   void callback_goal_poses_(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
   void callback_robot_pos_(const nav_msgs::msg::Odometry::SharedPtr msg);
   void callback_poses_(const geometry_msgs::msg::PoseArray::SharedPtr msg);
+
+  void write_info(geometry_msgs::msg::PoseArray & msg);
 
   static BT::PortsList providedPorts()
   {
@@ -81,6 +87,8 @@ private:
   bool set_goal_ = false;
 
   multi_nav2::ExplorationPolicy * policy_;
+
+  time_t timer_init_;
 
 };
 

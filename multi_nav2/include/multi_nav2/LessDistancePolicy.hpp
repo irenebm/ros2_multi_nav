@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#ifndef MULTINAV2__LESS_DISTANCE_POLICY_HPP_
+#define MULTINAV2__LESS_DISTANCE_POLICY_HPP_
+
 #include <string>
 #include <iostream>
 #include <vector>
@@ -20,9 +23,6 @@
 #include "multi_nav2/ExplorationPolicy.hpp"
 
 #include "rclcpp/rclcpp.hpp"
-
-#ifndef MULTINAV2__LESS_DISTANCE_POLICY_HPP_
-#define MULTINAV2__LESS_DISTANCE_POLICY_HPP_
 
 namespace multi_nav2
 {
@@ -35,12 +35,56 @@ public:
 
   geometry_msgs::msg::PoseStamped get_pose(
     geometry_msgs::msg::PoseArray & msg,
-    geometry_msgs::msg::Pose robot_pos_) override;
+    geometry_msgs::msg::Pose robot_pos_) override
+  {
+    double less_distance_ = -1;
+
+    for (size_t i = 0; i < msg.poses.size(); i++) {
+      float x_ = msg.poses[i].position.x;
+      float y_ = msg.poses[i].position.y;
+      double distance_ =
+        sqrt(
+        (x_ - robot_pos_.position.x) * (x_ - robot_pos_.position.x) +
+        (y_ - robot_pos_.position.y) * (y_ - robot_pos_.position.y));
+      if (less_distance_ < 0.0 || distance_ < less_distance_) {
+        less_distance_ = distance_;
+        goal_pos_.header.frame_id = "map";
+        goal_pos_.pose.position.x = x_;
+        goal_pos_.pose.position.y = y_;
+        // RCLCPP_INFO(node_->get_logger(), "goal asigno x  %f y  %f ", x_, y_);
+      }
+    }
+    return goal_pos_;
+  }
 
   geometry_msgs::msg::PoseStamped get_pose_2_robots(
     geometry_msgs::msg::PoseArray & msg,
     geometry_msgs::msg::Pose robot_pos_,
-    geometry_msgs::msg::PoseStamped goal_pos_other_) override;
+    geometry_msgs::msg::PoseStamped goal_pos_other_) override
+  {
+    double less_distance_ = -1;
+
+    for (size_t i = 0; i < msg.poses.size(); i++) {
+      float x_ = msg.poses[i].position.x;
+      float y_ = msg.poses[i].position.y;
+      // double distance_1_ = sqrt((x_ - goal_pos_other_.pose.position.x) * (x_ - goal_pos_other_.pose.position.x) + (y_ - goal_pos_other_.pose.position.y) * (y_ - goal_pos_other_.pose.position.y));
+      // double distance_2_ = sqrt((x_ - robot_pos_.position.x) * (x_ - robot_pos_.position.x) + (y_ - robot_pos_.position.y) * (y_ - robot_pos_.position.y));
+      // if (less_distance_ < 0.0 || (distance_1_ + distance_2_) > less_distance_) {
+      //   less_distance_ = (distance_1_ + distance_2_);
+      double distance_ =
+        sqrt(
+        (x_ - robot_pos_.position.x) * (x_ - robot_pos_.position.x) +
+        (y_ - robot_pos_.position.y) * (y_ - robot_pos_.position.y));
+      if (less_distance_ < 0.0 || distance_ < less_distance_) {
+        less_distance_ = distance_;
+        goal_pos_.header.frame_id = "map";
+        goal_pos_.pose.position.x = x_;
+        goal_pos_.pose.position.y = y_;
+      }
+    }
+
+    return goal_pos_;
+  }
 
 private:
   geometry_msgs::msg::PoseStamped goal_pos_;
