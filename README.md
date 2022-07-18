@@ -19,28 +19,32 @@ Para llevar a cabo este objetivo el trabajo constará de las siguientes fases:
 ## Ejecución:
 
 ### 1 robot
+```
 ros2 launch nav2_bringup multi_tb3_simulation_launch.py slam:=True
 
 ros2 launch multirobot_map_merge map_merge.launch.py 
 
 ros2 run multi_nav2 check_pf 
 ros2 run multi_nav2 patrolling_main 
+```
 
 
 ### 2 robots
+```
 ros2 launch nav2_bringup multi_tb3_simulation_launch.py slam:=True
 
 ros2 launch multirobot_map_merge map_merge.launch.py 
 
 ros2 run multi_nav2 check_pf 
 ros2 launch multi_nav2 multi_robot_patrol.py
-
+```
 
 ### 3 robots
+```
 ros2 launch nav2_bringup multi_tb3_simulation_launch.py slam:=True
 
 ros2 launch multirobot_map_merge map_merge.launch.py 
 
 ros2 run multi_nav2 check_pf 
 ros2 launch multi_nav2 multi_robot_patrol.py
-
+```
